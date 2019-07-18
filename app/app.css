@@ -1,0 +1,27 @@
+ 
+@import '~nativescript-theme-core/css/core.light.css';
+
+.fa{
+    font-family: "FontAwesome", "fontawesome-webfont";
+}
+.far {
+    font-family: "Font Awesome 5 Free", "fa-regular-400";
+}
+
+.fab {
+    font-family: "Font Awesome 5 Brands", "fa-brands-400";
+}
+
+.fas {
+    font-family: "Font Awesome 5 Free", "fa-solid-900";
+
+}
+.fas-icon {
+    font-family: "Font Awesome 5 Free", "fa-solid-900";
+    font-size: 40;
+}
+
+.ico {
+    font-family: "IcoMoon-Free";
+}
+
