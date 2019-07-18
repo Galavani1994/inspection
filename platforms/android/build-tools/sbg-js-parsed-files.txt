@@ -1,0 +1,4 @@
+D:\native\inspection\platforms\android\app\src\main\assets\app\bundle.js
+D:\native\inspection\platforms\android\app\src\main\assets\app\starter.js
+D:\native\inspection\platforms\android\app\src\main\assets\app\tns-java-classes.js
+D:\native\inspection\platforms\android\app\src\main\assets\app\vendor.js

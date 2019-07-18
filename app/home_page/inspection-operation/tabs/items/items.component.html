@@ -38,7 +38,7 @@
                                 <Label text="{{fff.value}}" [row]="r+1" [col]="ite.values.length-(c)"
                                        *ngFor="let fff of ite.values;let c=index" class="lbl"></Label>
                                 <Label text="&#xf2ed;"color="red" [row]="r+1" class="operation" [col]="0" marginLeft="30" (tap)="delete(ite.id)"></Label>
-                                <Label text="&#xf044;" color="blue" [row]="r+1" class="operation"  [col]="0" marginRight="30" (click)="edit(ite.id)"></Label>
+                                <Label text="&#xf044;" color="blue" [row]="r+1" class="operation"  [col]="0" marginRight="30" (tap)="edit(ite.id)"></Label>
                             </ng-container>
                         </GridLayout>
                     </scroll-view>

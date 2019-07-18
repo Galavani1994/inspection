@@ -20,6 +20,8 @@ export class ItemsComponent implements OnInit {
     public resultItemChsrschter: Array<any>;
 
     id: number = 0;
+    newId:number;
+    update=false;
     inspectionItem = [];
     productTitles = ['...'];
     identifyCharacters = [];
@@ -70,34 +72,10 @@ export class ItemsComponent implements OnInit {
         });
     }
 
-    public insert() {
-        this.database.execSQL("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
-            alert('ثبت شد');
-            console.log("INSERT RESULT", id);
-        }, error => {
-            console.log("INSERT ERROR", error);
-        });
-        this.fetch();
-    }
-
-    public fetch() {
-        this.database.all("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
-            this.resultItemChsrschter = [];
-            for (var row in rows) {
-                this.resultItemChsrschter.push({
-                        id: rows[row][0],
-                        values: JSON.parse(rows[row][1])
-                    }
-
-                );
-
-            }
-        }, error => {
-            console.log("SELECT ERROR", error);
-        });
-
-        this.show = true;
-
+    public clearData() {
+        for (let i of this.itemCharacter) {
+            i.value = '';
+        }
     }
 
     ngOnInit() {
@@ -125,8 +103,6 @@ export class ItemsComponent implements OnInit {
         } else {
             this.allow = false;
         }
-
-
     }
 
     public deleteTable() {
@@ -137,22 +113,68 @@ export class ItemsComponent implements OnInit {
         });
     }
 
+    public insert() {
+       if(this.update==false && this.newId==null){
+           this.database.execSQL("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
+               alert('ثبت شد');
+               console.log("INSERT RESULT", id);
+           }, error => {
+               console.log("INSERT ERROR", error);
+           });
+       }else {
+           this.database.execSQL("update itemTbl set productCharacter="+JSON.stringify(this.itemCharacter)+"where id="+this.newId).then(id => {
+               alert('ویرایش  شد');
+               console.log("updateed RESULT", id);
+           }, error => {
+               console.log("update ERROR", error);
+           });
+       }
+        this.fetch();
+        this.clearData();
+        this.update=false;
+        this.newId=null;
+        console.log(this.itemCharacter);
+
+    }
+
+    public fetch() {
+        this.database.all("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
+            this.resultItemChsrschter = [];
+            for (var row in rows) {
+                this.resultItemChsrschter.push({
+                        id: rows[row][0],
+                        values: JSON.parse(rows[row][1])
+                    }
+                );
+
+            }
+        }, error => {
+            console.log("SELECT ERROR", error);
+        });
+
+        this.show = true;
+
+    }
+
     delete(id) {
-        this.database.execSQL("DELETE FROM  itemTbl WHERE id="+id).then(de => {
+        this.database.execSQL("DELETE FROM  itemTbl WHERE id=" + id).then(de => {
             alert("deleted succesfully....");
         }, error => {
             console.log('errore is...', error);
         });
-       this.fetch();
+        this.fetch();
     }
 
     edit(id) {
-        alert(id);
-        // this.database.execSQL("DELETE FROM  itemTbl WHERE id="+id).then(de => {
-        //     alert("deleted succesfully....");
-        // }, error => {
-        //     console.log('errore is...', error);
-        // });
+        this.newId=id;
+        this.update=true;
+        this.database.all("select * FROM  itemTbl WHERE id=" + id).then(de => {
+
+            this.itemCharacter = JSON.parse(de[0][1]);
+            console.log('selected data is...', JSON.parse(de[0][1]));
+        }, error => {
+            console.log('errore is...', error);
+        });
     }
 
 }
