@@ -84,7 +84,7 @@ module.exports =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "2326a65b5f1ca01e8ad1";
+/******/ 	var hotCurrentHash = "5e4e5ecfdccb2c24457a";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1402,7 +1402,7 @@ var ItemsComponent = /** @class */ (function () {
             });
         }
         else {
-            this.database.execSQL("update itemTbl set productCharacter=" + JSON.stringify(this.itemCharacter) + "where id=" + this.newId).then(function (id) {
+            this.database.execSQL("update itemTbl set productCharacter= ? WHERE id=?", [JSON.stringify(this.itemCharacter), this.newId]).then(function (id) {
                 alert('ویرایش  شد');
                 console.log("updateed RESULT", id);
             }, function (error) {

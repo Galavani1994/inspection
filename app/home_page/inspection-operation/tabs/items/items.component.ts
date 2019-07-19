@@ -122,7 +122,7 @@ export class ItemsComponent implements OnInit {
                console.log("INSERT ERROR", error);
            });
        }else {
-           this.database.execSQL("update itemTbl set productCharacter="+JSON.stringify(this.itemCharacter)+"where id="+this.newId).then(id => {
+           this.database.execSQL("update itemTbl set productCharacter= ? WHERE id=?",[JSON.stringify(this.itemCharacter),this.newId]).then(id => {
                alert('ویرایش  شد');
                console.log("updateed RESULT", id);
            }, error => {
