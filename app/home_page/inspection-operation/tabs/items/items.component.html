@@ -1,13 +1,12 @@
 <StackLayout orientation="vertical" padding="30px" backgroundColor="#8fbc8f">
     <StackLayout class="input-field">
         <DockLayout>
-            <Label style="margin-top: 10" text="انتخاب محصول:" dock="right"></Label>
+            <Label style="margin-top: 10" text="انتخاب محصول" dock="right"></Label>
             <DropDown #dd [items]="productTitles" dock="right"
                       [(ngModel)]="index"
                       (selectedIndexChanged)="selectedIndexChanged($event)"
                       backroundColor="white" color="black" class="drop-down">
             </DropDown>
-           <!-- <ListPicker [items]="productTitles" [selectedIndex]="index" (selectedIndexChange)="selectedIndexChanged($event)"></ListPicker>-->
 
         </DockLayout>
     </StackLayout>

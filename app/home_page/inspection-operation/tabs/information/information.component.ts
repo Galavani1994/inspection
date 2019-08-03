@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import data from "~/product_file/jsonFile.json";
+import data from "~/product_file/666.json";
 
 
 @Component({

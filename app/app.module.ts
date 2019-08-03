@@ -16,13 +16,11 @@ import {EquipmentsComponent} from './home_page/inspection-operation/tabs/equipme
 import {DropDownModule} from "nativescript-drop-down/angular";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NativeScriptFormsModule} from "nativescript-angular";
-import {NgTemplateOutlet} from "@angular/common";
 
-// Uncomment and add to NgModule imports if you need to use two-way binding
-// import { NativeScriptFormsModule } from 'nativescript-angular/forms';
+import {TNSCheckBoxModule} from "nativescript-checkbox/angular";
 
-// Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-// import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
+
+
 
 @NgModule({
     declarations: [
@@ -45,6 +43,8 @@ import {NgTemplateOutlet} from "@angular/common";
         FormsModule,
         ReactiveFormsModule,
         NativeScriptFormsModule,
+        TNSCheckBoxModule
+
 
 
     ],

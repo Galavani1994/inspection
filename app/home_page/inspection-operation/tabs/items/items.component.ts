@@ -1,11 +1,10 @@
 import {Component, DoCheck, OnInit} from "@angular/core";
 import * as appSettings from "tns-core-modules/application-settings";
-import data from "~/product_file/jsonFile.json";
-import {error} from "tns-core-modules/trace";
-import {GridLayout} from "tns-core-modules/ui/layouts/grid-layout";
-import {Button} from "tns-core-modules/ui/button";
-import {ListPicker} from "tns-core-modules/ui/list-picker";
+import data from "~/product_file/666.json";
+
 import {DropDown} from "nativescript-drop-down";
+import {ItemsService} from "~/services/items/items.service";
+
 
 var Sqlite = require("nativescript-sqlite");
 
@@ -23,7 +22,7 @@ export class ItemsComponent implements OnInit {
     newId:number;
     update=false;
     inspectionItem = [];
-    productTitles = ['...'];
+    productTitles = [];
     identifyCharacters = [];
     public itemCharacter = [];
     public selectedIndex = 0;
@@ -36,9 +35,15 @@ export class ItemsComponent implements OnInit {
     public mainId: number;
     columns: string = "auto,auto,auto,auto";
 
-    public constructor() {
-        //سthis.deleteTable();
-        this.create_database();
+    public constructor(public itemService:ItemsService) {
+        this.itemService;
+    }
+    ngOnInit() {
+
+        this.inspectionItem = data.inspectionOperationItems;
+        for (let item of this.inspectionItem) {
+            this.productTitles.push(item.productTitle);
+        }
     }
 
     genCols(item) {
@@ -57,20 +62,6 @@ export class ItemsComponent implements OnInit {
         return rows
     }
 
-    public create_database() {
-
-        (new Sqlite("my.db")).then(db => {
-            db.execSQL("CREATE TABLE IF NOT EXISTS itemTbl (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " productCharacter TEXT, productName TEXT, productId TEXT)").then(id => {
-                alert('جدول ایجاد شد');
-                this.database = db;
-            }, error => {
-                console.log("CREATE TABLE ERROR", error);
-            });
-        }, error => {
-            console.log("OPEN DB ERROR", error);
-        });
-    }
 
     public clearData() {
         for (let i of this.itemCharacter) {
@@ -78,12 +69,7 @@ export class ItemsComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
-        this.inspectionItem = data.inspectionOperationItems;
-        for (let item of this.inspectionItem) {
-            this.productTitles.push(item.productTitle);
-        }
-    }
+
 
     public selectedIndexChanged(args) {
         let picker = <DropDown>args.object;
@@ -106,7 +92,7 @@ export class ItemsComponent implements OnInit {
     }
 
     public deleteTable() {
-        this.database.execSQL("DROP TABLE itemTbl").then(de => {
+        this.itemService.excute("DROP TABLE itemTbl").then(de => {
             alert("جدول مورد نظر حذف شد");
         }, error => {
             console.log('errore is...', error);
@@ -114,50 +100,48 @@ export class ItemsComponent implements OnInit {
     }
 
     public insert() {
-       if(this.update==false && this.newId==null){
-           this.database.execSQL("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
-               alert('ثبت شد');
-               console.log("INSERT RESULT", id);
-           }, error => {
-               console.log("INSERT ERROR", error);
-           });
-       }else {
-           this.database.execSQL("update itemTbl set productCharacter= ? WHERE id=?",[JSON.stringify(this.itemCharacter),this.newId]).then(id => {
-               alert('ویرایش  شد');
-               console.log("updateed RESULT", id);
-           }, error => {
-               console.log("update ERROR", error);
-           });
-       }
+        if(this.update==false && this.newId==null){
+           this.itemService.excute2("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
+                alert('ثبت شد');
+                console.log("INSERT RESULT", id);
+            }, error => {
+                console.log("INSERT ERROR", error);
+            });
+        }else {
+            this.itemService.excute2("update itemTbl set productCharacter= ? WHERE id=?",[JSON.stringify(this.itemCharacter),this.newId]).then(id => {
+                alert('ویرایش  شد');
+                console.log("updateed RESULT", id);
+            }, error => {
+                console.log("update ERROR", error);
+            });
+        }
         this.fetch();
         this.clearData();
         this.update=false;
         this.newId=null;
-        console.log(this.itemCharacter);
-
     }
 
     public fetch() {
-        this.database.all("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
-            this.resultItemChsrschter = [];
-            for (var row in rows) {
-                this.resultItemChsrschter.push({
-                        id: rows[row][0],
-                        values: JSON.parse(rows[row][1])
-                    }
-                );
+        this.itemService.All("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
+        this.resultItemChsrschter = [];
+        for (var row in rows) {
+            this.resultItemChsrschter.push({
+                    id: rows[row][0],
+                    values: JSON.parse(rows[row][1])
+                }
+            );
 
-            }
-        }, error => {
-            console.log("SELECT ERROR", error);
-        });
+        }
+    }, error => {
+        console.log("SELECT ERROR", error);
+    });
 
         this.show = true;
 
     }
 
     delete(id) {
-        this.database.execSQL("DELETE FROM  itemTbl WHERE id=" + id).then(de => {
+        this.itemService.excute("DELETE FROM  itemTbl WHERE id=" + id).then(de => {
             alert("deleted succesfully....");
         }, error => {
             console.log('errore is...', error);
@@ -168,7 +152,7 @@ export class ItemsComponent implements OnInit {
     edit(id) {
         this.newId=id;
         this.update=true;
-        this.database.all("select * FROM  itemTbl WHERE id=" + id).then(de => {
+        this.itemService.All("select * FROM  itemTbl WHERE id=" + id).then(de => {
 
             this.itemCharacter = JSON.parse(de[0][1]);
             console.log('selected data is...', JSON.parse(de[0][1]));
@@ -178,3 +162,4 @@ export class ItemsComponent implements OnInit {
     }
 
 }
+
