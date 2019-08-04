@@ -1,69 +1,77 @@
-<StackLayout orientation="vertical" padding="30px" backgroundColor="#8fbc8f">
-    <StackLayout>
-        <DockLayout marginBottom="5">
-            <Label dock="right" text="محصول" marginTop="20" margin="0 10 0 20"></Label>
-            <DropDown #dd [items]="productTitles" dock="right"
-                      [(ngModel)]="indexItem"
-                      (selectedIndexChanged)="selectedIndexChanged($event)"
-                      class="drop-down">
-            </DropDown>
-        </DockLayout>
-        <scroll-view orientation="vertical" height="80" *ngIf="show">
-            <StackLayout orientation="vertical" style="flex-direction: row-reverse;">
+<!--<scroll-view orientation="vertical">-->
+    <StackLayout orientation="vertical" padding="30px" backgroundColor="#8fbc8f">
+        <StackLayout>
+            <DockLayout marginBottom="5">
+                <Label dock="right" text="محصول" marginTop="20" margin="0 10 0 20"></Label>
+                <DropDown #dd [items]="productTitles" dock="right"
+                          [(ngModel)]="indexItem"
+                          (selectedIndexChanged)="selectedIndexChanged($event)"
+                          class="drop-down">
+                </DropDown>
+            </DockLayout>
+            <scroll-view orientation="vertical" height="80" *ngIf="show">
+                <StackLayout orientation="vertical" style="flex-direction: row-reverse;">
+                    <scroll-view orientation="horizontal">
+                        <GridLayout [rows]="genRows(resultItemChsrschter)"
+                                    [columns]="genCols(itemCharacter)"
+                                    horizontalAlignment="center">
+                            <Label horizontalAlignment="right" row="0" [col]="itemCharacter.length-(i)"
+                                   *ngFor="let it of itemCharacter; let i=index"
+                                   text="{{it.title}}" class="lbl">
+                            </Label>
+                            <ng-container *ngFor="let ite of resultItemChsrschter;let r=index">
+                                <Label text="{{fff.value}}" [row]="r+1" [col]="ite.values.length-(c)"
+                                       *ngFor="let fff of ite.values;let c=index" class="lbl"></Label>
+                                <check-box id="CB{{ite.id}}" [row]="r+1" [col]="ite.values.length+1"
+                                           (tap)="checkedTbl(ite.id)"></check-box>
+                                <!--<RadioButton tex="" id="CB{{ite.id}}" [row]="r+1" [col]="ite.values.length+1"></RadioButton>-->
+                            </ng-container>
+                        </GridLayout>
+                    </scroll-view>
+                </StackLayout>
+            </scroll-view>
+        </StackLayout>
+        <StackLayout marginTop="5">
+            <DockLayout>
+                <Label dock="right" text="چک لیست" margin="20 10 0 10"></Label>
+                <DropDown #ddd [items]="checkListTitle" dock="right"
+                          [(ngModel)]="indexCheckList"
+                          (selectedIndexChanged)="selectedIndexChangedCheckList($event)"
+                          class="drop-down">
+                </DropDown>
+            </DockLayout>
+        </StackLayout>
+        <StackLayout>
+            <Button text="افزودن" (tap)="checkListSave()"></Button>
+            <Button text="حذف جدول" (tap)="deleteTable()"></Button>
+            <Button text="ایجاد جدول" (tap)="createTable()"></Button>
+            <Button text="مشاهده" (tap)="fetchChecklist()"></Button>
+        </StackLayout>
+        <scroll-view orientation="vertical">
+            <stack-layout *ngIf="showCheckLsit">
                 <scroll-view orientation="horizontal">
-                    <GridLayout [rows]="genRows(resultItemChsrschter)"
-                                [columns]="genCols(itemCharacter)"
-                                horizontalAlignment="center">
-                        <Label horizontalAlignment="right" row="0" [col]="itemCharacter.length-(i)"
-                               *ngFor="let it of itemCharacter; let i=index"
-                               text="{{it.title}}" class="lbl">
-                        </Label>
-                        <ng-container *ngFor="let ite of resultItemChsrschter;let r=index">
-                            <Label text="{{fff.value}}" [row]="r+1" [col]="ite.values.length-(c)"
-                                   *ngFor="let fff of ite.values;let c=index" class="lbl"></Label>
-                            <check-box id="CB{{ite.id}}" [row]="r+1" [col]="ite.values.length+1"
-                                       (tap)="checkedTbl(ite.id)"></check-box>
-                            <!--<RadioButton tex="" id="CB{{ite.id}}" [row]="r+1" [col]="ite.values.length+1"></RadioButton>-->
+                    <GridLayout [rows]="genCheckListRows(resultCheckList)" columns="auto,auto,auto,auto,auto,auto" class="gridd">
+                        <!--header-->
+                        <label text="چک لیست" col="5" row="0"></label>
+                        <label text="محصول" col="4" row="0"></label>
+                        <label text="مشخصه" col="3" row="0"></label>
+                        <label text="پاسخ دهی" col="2" row="0"></label>
+                        <label text="امتیاز" col="1" row="0"></label>
+                        <label text="عملیات" col="0" row="0"></label>
+                        <!--body-->
+                        <ng-container *ngFor="let ch of resultCheckList;let c=index" >
+                            <label text="{{ch.values.checkListTitle}}" [row]="c+1" [col]="5" class="bodyTbl"></label>
+                            <label text="{{ch.values.itemTitle}}" [row]="c+1" [col]="4" class="bodyTbl"></label>
+                            <label text="&#xf577;" color="#a52a2a" (tap)="displayIdentifyChars(ch.values.identifyCharId)" fontSize="16" [row]="c+1" [col]="3" class="bodyTbl"></label>
+                            <label text="&#xf508;" color="#5c79ff"  fontSize="16" [row]="c+1" [col]="2" class="bodyTbl"></label>
+                            <label text="20" [row]="c+1" [col]="1" class="bodyTbl"></label>
+                            <label text="&#xf2ed;" color="#ff6725" fontSize="16" (tap)="deleteCheklist(ch.id)" [row]="c+1" [col]="0" class="bodyTbl"></label>
                         </ng-container>
                     </GridLayout>
                 </scroll-view>
-            </StackLayout>
+            </stack-layout>
         </scroll-view>
-    </StackLayout>
-    <StackLayout marginTop="5">
-        <DockLayout>
-            <Label dock="right" text="چک لیست" margin="20 10 0 10"></Label>
-            <DropDown #ddd [items]="checkListTitle" dock="right"
-                      [(ngModel)]="indexCheckList"
-                      (selectedIndexChanged)="selectedIndexChangedCheckList($event)"
-                      class="drop-down">
-            </DropDown>
-        </DockLayout>
-    </StackLayout>
-    <StackLayout>
-        <Button text="افزودن" (tap)="checkListSave()"></Button>
-        <Button text="حذف جدول" (tap)="deleteTable()"></Button>
-        <Button text="ایجاد جدول" (tap)="createTable()"></Button>
-        <Button text="مشاهده" (tap)="fetchChecklist()"></Button>
-    </StackLayout>
-    <scroll-view orientation="vertical">
-        <stack-layout>
-            <scroll-view orientation="horizontal">
-                <!--<GridLayout [rows]="genCheckListRows(item)" columns="auto,auto,auto,auto,auto,auto" class="gridd">
-                    &lt;!&ndash;header&ndash;&gt;
-                    <label text="چک لیست" col="5" row="0"></label>
-                    <label text="محصول" col="4" row="0"></label>
-                    <label text="مشخصه" col="3" row="0"></label>
-                    <label text="پاسخ دهی" col="2" row="0"></label>
-                    <label text="امتیاز" col="1" row="0"></label>
-                    <label text="عملیات" col="0" row="0"></label>
-                    &lt;!&ndash;body&ndash;&gt;
-                   <ng-container *ngFor="let ch of resultCheckList;let c=index" >
-                       <label text="cc.itemTitle" [col]="ch.values.length-cl" [row]="c+1" *ngFor="let cc of ch.values; let cl=index"></label>
-                   </ng-container>
-                </GridLayout>-->
-            </scroll-view>
-        </stack-layout>
-    </scroll-view>
 
-</StackLayout>
+    </StackLayout>
+<!--
+</scroll-view>-->

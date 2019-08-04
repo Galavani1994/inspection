@@ -1,10 +1,16 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 
 import data from "~/product_file/666.json";
 import {ItemsService} from "~/services/items/items.service";
 import {DropDown} from "nativescript-drop-down";
 import {CheckListItem} from "~/model/checkListItem";
 import {CheckListService} from "~/services/checkList/checkList.service";
+import {templateRefExtractor} from "@angular/core/src/render3";
+import {error} from "tns-core-modules/trace";
+import * as dialogs from "tns-core-modules/ui/dialogs"
+import {ModalDialogOptions, ModalDialogService} from "nativescript-angular";
+import {DialogOptions} from "tns-core-modules/ui/dialogs";
+import {ItemModalComponent} from "~/home_page/modals/item-modal/item-modal.component";
 
 @Component({
     selector: 'app-check-list',
@@ -22,12 +28,13 @@ export class CheckListComponent implements OnInit {
     checkListTitle = [];
     indexCheckList: number;
 
-    itemId:number;
+    itemId: number;
 
 
-    checkListItemVaue={itemTitle:'',identifyCharId:null,checkListTitle:'',checkListId:null,points:null};
+    checkListItemVaue = {itemTitle: '', identifyCharId: null, checkListTitle: '', checkListId: null, points: null};
 
     show = false;
+    showCheckLsit=false;
     proTitle = '';
     proId = '';
     productId = '';
@@ -36,7 +43,9 @@ export class CheckListComponent implements OnInit {
     public itemCharacter = [];
     allow = false;
 
-    constructor(public itemService: ItemsService,public checkListService:CheckListService) {
+    constructor(public itemService: ItemsService, public checkListService: CheckListService,
+                private modalService: ModalDialogService,
+                private viewContainerRef: ViewContainerRef) {
         this.itemService;
         this.checkListService;
     }
@@ -68,48 +77,56 @@ export class CheckListComponent implements OnInit {
         })
         return rows;
     }
-    /*
+
     genCheckListRows(item) {
         let rows = "*";
-        item.forEach((el) => {
-            rows += ",*";
-        })
-        return rows
-    }*/
+        if (typeof item != "undefined") {
+            item.forEach((el) => {
+                rows += ",*";
+            })
+        }
 
-    public checkedTbl(args){
-        this.checkListItemVaue.identifyCharId=args;
+        return rows
     }
-    public checkListSave(el){
-        this.checkListService.excute2("insert into checkListTbl(checkList) VALUES (?) ",[JSON.stringify(this.checkListItemVaue)]).then(id => {
+
+    public checkedTbl(args) {
+        this.checkListItemVaue.identifyCharId = args;
+    }
+
+    public checkListSave(el) {
+        this.checkListService.excute2("insert into checkListTbl(checkList) VALUES (?) ", [JSON.stringify(this.checkListItemVaue)]).then(id => {
             alert('ثبت شد');
             console.log("INSERT RESULT", id);
         }, error => {
             console.log("INSERT ERROR", error);
         });
     }
-    public deleteTable(){
+
+    public deleteTable() {
         this.checkListService.excute("DROP TABLE checkListTbl").then(de => {
             alert("جدول مورد نظر حذف شد");
         }, error => {
             console.log('errore is...', error);
         });
     }
-    public createTable(){
+
+    public createTable() {
         this.checkListService;
     }
+
     public fetch() {
         this.itemService.All("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
             this.resultItemChsrschter = [];
+            console.log('rows',rows);
             for (var row in rows) {
                 this.resultItemChsrschter.push({
                         id: rows[row][0],
-                        values: JSON.parse(rows[row][1])
+                        values: JSON.parse(rows[row][1]),
+                        productId:rows[row][3]
                     }
                 );
 
             }
-
         }, error => {
             console.log("SELECT ERROR", error);
         });
@@ -118,27 +135,36 @@ export class CheckListComponent implements OnInit {
 
     }
 
-    public fetchChecklist(){
-       /* this.checkListService.All("SELECT * FROM checkListTbl").then(rows => {
-            this.resultCheckList = [];
-            for (var row in rows) {
-                this.resultCheckList.push({
-                        id: rows[row][0],
-                        values: JSON.parse(rows[row][1])
-                    }
-                );
-            }
-            console.log( this.resultCheckList);
+    public fetchChecklist() {
+         this.checkListService.All("SELECT * FROM checkListTbl").then(rows => {
+             this.resultCheckList = [];
+             for (var row in rows) {
+                 this.resultCheckList.push({
+                         id: rows[row][0],
+                         values: JSON.parse(rows[row][1])
+                     }
+                 );
+             }
+             console.log( this.resultCheckList);
+             this.showCheckLsit=true;
 
+         }, error => {
+             console.log("SELECT ERROR", error);
+         });
+
+    }
+    public deleteCheklist(id){
+        this.checkListService.excute("delete from checkListTbl where id="+id).then(de => {
+            alert("deleted succesfully....");
         }, error => {
-            console.log("SELECT ERROR", error);
-        });*/
-
+            console.log('errore is...', error);
+        });
+        this.fetchChecklist();
     }
     public selectedIndexChanged(args) {
         let picker = <DropDown>args.object;
         let itemName = picker.items[picker.selectedIndex];
-        this.checkListItemVaue.itemTitle=itemName;
+        this.checkListItemVaue.itemTitle = itemName;
         if (itemName != 0) {
             this.itemCharacter = [];
             let titleIndex = this.inspectionItem.findIndex(obj => obj.productTitle == itemName);
@@ -159,7 +185,34 @@ export class CheckListComponent implements OnInit {
     public selectedIndexChangedCheckList(args) {
         let picker = <DropDown>args.object;
         let checkListName = picker.items[picker.selectedIndex];
-        this.checkListItemVaue.checkListTitle=checkListName;
+        this.checkListItemVaue.checkListTitle = checkListName;
+
+    }
+    public displayIdentifyChars(id){
+        // this.itemService.All("select * from itemTbl where id="+id).then(res=>{
+        //     // console.log(res)
+        //     alert(res[0][1]);
+        // },eerror=>{
+        //     console.log(error);
+        // });
+
+        // dialogs.confirm({
+        //     title: "Your title",
+        //     message: "Your message",
+        //     okButtonText: "Your button text",
+        //     cancelButtonText: "Cancel text",
+        //     neutralButtonText: "Neutral text"
+        // }).then(result => {
+        //     // result argument is boolean
+        //     console.log("Dialog result: " + result);
+        // });
+
+        let options: ModalDialogOptions = {
+            viewContainerRef: this.viewContainerRef,
+
+        };
+
+        this.modalService.showModal(ItemModalComponent, options);
 
     }
 

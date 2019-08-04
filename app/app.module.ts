@@ -18,6 +18,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NativeScriptFormsModule} from "nativescript-angular";
 
 import {TNSCheckBoxModule} from "nativescript-checkbox/angular";
+import { ItemModalComponent } from './home_page/modals/item-modal/item-modal.component';
 
 
 
@@ -35,6 +36,7 @@ import {TNSCheckBoxModule} from "nativescript-checkbox/angular";
         CheckListComponent,
         StandardsComponent,
         EquipmentsComponent,
+        ItemModalComponent,
     ],
     imports: [
         NativeScriptModule,
@@ -50,6 +52,7 @@ import {TNSCheckBoxModule} from "nativescript-checkbox/angular";
     ],
     bootstrap: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA],
+    entryComponents:[ItemModalComponent]
 })
 export class AppModule {
 }
