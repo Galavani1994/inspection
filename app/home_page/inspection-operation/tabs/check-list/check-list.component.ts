@@ -11,6 +11,8 @@ import * as dialogs from "tns-core-modules/ui/dialogs"
 import {ModalDialogOptions, ModalDialogService} from "nativescript-angular";
 import {DialogOptions} from "tns-core-modules/ui/dialogs";
 import {ItemModalComponent} from "~/home_page/modals/item-modal/item-modal.component";
+import {CheckListModalComponent} from "~/home_page/modals/check-list-modal/check-list-modal.component";
+
 
 @Component({
     selector: 'app-check-list',
@@ -19,6 +21,7 @@ import {ItemModalComponent} from "~/home_page/modals/item-modal/item-modal.compo
     moduleId: module.id,
 })
 export class CheckListComponent implements OnInit {
+
     @ViewChild("CB1") FirstCheckBox: ElementRef;
     productTitles = [];
     inspectionItem = [];
@@ -96,7 +99,7 @@ export class CheckListComponent implements OnInit {
     public checkListSave(el) {
         this.checkListService.excute2("insert into checkListTbl(checkList) VALUES (?) ", [JSON.stringify(this.checkListItemVaue)]).then(id => {
             alert('ثبت شد');
-            console.log("INSERT RESULT", id);
+            this.fetchChecklist();
         }, error => {
             console.log("INSERT ERROR", error);
         });
@@ -117,7 +120,6 @@ export class CheckListComponent implements OnInit {
     public fetch() {
         this.itemService.All("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
             this.resultItemChsrschter = [];
-            console.log('rows',rows);
             for (var row in rows) {
                 this.resultItemChsrschter.push({
                         id: rows[row][0],
@@ -145,7 +147,6 @@ export class CheckListComponent implements OnInit {
                      }
                  );
              }
-             console.log( this.resultCheckList);
              this.showCheckLsit=true;
 
          }, error => {
@@ -189,31 +190,26 @@ export class CheckListComponent implements OnInit {
 
     }
     public displayIdentifyChars(id){
-        // this.itemService.All("select * from itemTbl where id="+id).then(res=>{
-        //     // console.log(res)
-        //     alert(res[0][1]);
-        // },eerror=>{
-        //     console.log(error);
-        // });
-
-        // dialogs.confirm({
-        //     title: "Your title",
-        //     message: "Your message",
-        //     okButtonText: "Your button text",
-        //     cancelButtonText: "Cancel text",
-        //     neutralButtonText: "Neutral text"
-        // }).then(result => {
-        //     // result argument is boolean
-        //     console.log("Dialog result: " + result);
-        // });
-
         let options: ModalDialogOptions = {
+            context: {},
             viewContainerRef: this.viewContainerRef,
-
         };
-
+        this.itemService.All("select * from itemTbl where id="+id).then(res=>{
+           options.context= JSON.parse(res[0][1])
+        },eerror=>{
+            console.log(error);
+        });
         this.modalService.showModal(ItemModalComponent, options);
+    }
 
+    public checklListQuestion(res){
+        let options: ModalDialogOptions = {
+            context: res,
+            viewContainerRef: this.viewContainerRef,
+            fullscreen:true
+        };
+        this.modalService.showModal(CheckListModalComponent, options);
+       // console.log(res);
     }
 
 

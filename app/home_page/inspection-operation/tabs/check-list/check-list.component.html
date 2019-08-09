@@ -34,22 +34,26 @@
         <StackLayout marginTop="5">
             <DockLayout>
                 <Label dock="right" text="چک لیست" margin="20 10 0 10"></Label>
-                <DropDown #ddd [items]="checkListTitle" dock="right"
-                          [(ngModel)]="indexCheckList"
-                          (selectedIndexChanged)="selectedIndexChangedCheckList($event)"
-                          class="drop-down">
-                </DropDown>
+                    <DropDown #ddd [items]="checkListTitle" dock="right"
+                              [(ngModel)]="indexCheckList"
+                              (selectedIndexChanged)="selectedIndexChangedCheckList($event)"
+                              class="drop-down">
+                    </DropDown>
             </DockLayout>
         </StackLayout>
         <StackLayout>
-            <Button text="افزودن" (tap)="checkListSave()"></Button>
-            <Button text="حذف جدول" (tap)="deleteTable()"></Button>
-            <Button text="ایجاد جدول" (tap)="createTable()"></Button>
-            <Button text="مشاهده" (tap)="fetchChecklist()"></Button>
+
+            <DockLayout>
+                <Button text="افزودن" (tap)="checkListSave()" dock="right"></Button>
+                <Button text="حذف جدول" (tap)="deleteTable()" dock="right"></Button>
+                <Button text="ایجاد جدول" (tap)="createTable()" dock="right"></Button>
+                <Button text="مشاهده" (tap)="fetchChecklist()" dock="right"></Button>
+            </DockLayout>
         </StackLayout>
         <scroll-view orientation="vertical">
             <stack-layout *ngIf="showCheckLsit">
                 <scroll-view orientation="horizontal">
+
                     <GridLayout [rows]="genCheckListRows(resultCheckList)" columns="auto,auto,auto,auto,auto,auto" class="gridd">
                         <!--header-->
                         <label text="چک لیست" col="5" row="0"></label>
@@ -63,7 +67,7 @@
                             <label text="{{ch.values.checkListTitle}}" [row]="c+1" [col]="5" class="bodyTbl"></label>
                             <label text="{{ch.values.itemTitle}}" [row]="c+1" [col]="4" class="bodyTbl"></label>
                             <label text="&#xf577;" color="#a52a2a" (tap)="displayIdentifyChars(ch.values.identifyCharId)" fontSize="16" [row]="c+1" [col]="3" class="bodyTbl"></label>
-                            <label text="&#xf508;" color="#5c79ff"  fontSize="16" [row]="c+1" [col]="2" class="bodyTbl"></label>
+                            <label text="&#xf508;" color="#383bff" (tap)="checklListQuestion(ch)" fontSize="16" [row]="c+1" [col]="2" class="bodyTbl"></label>
                             <label text="20" [row]="c+1" [col]="1" class="bodyTbl"></label>
                             <label text="&#xf2ed;" color="#ff6725" fontSize="16" (tap)="deleteCheklist(ch.id)" [row]="c+1" [col]="0" class="bodyTbl"></label>
                         </ng-container>

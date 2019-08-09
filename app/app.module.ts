@@ -19,10 +19,13 @@ import {NativeScriptFormsModule} from "nativescript-angular";
 
 import {TNSCheckBoxModule} from "nativescript-checkbox/angular";
 import { ItemModalComponent } from './home_page/modals/item-modal/item-modal.component';
+import { CheckListModalComponent } from './home_page/modals/check-list-modal/check-list-modal.component';
 
 
 
 
+// @ts-ignore
+// @ts-ignore
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,6 +40,7 @@ import { ItemModalComponent } from './home_page/modals/item-modal/item-modal.com
         StandardsComponent,
         EquipmentsComponent,
         ItemModalComponent,
+        CheckListModalComponent,
     ],
     imports: [
         NativeScriptModule,
@@ -45,14 +49,16 @@ import { ItemModalComponent } from './home_page/modals/item-modal/item-modal.com
         FormsModule,
         ReactiveFormsModule,
         NativeScriptFormsModule,
-        TNSCheckBoxModule
+        TNSCheckBoxModule,
+
+
 
 
 
     ],
     bootstrap: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA],
-    entryComponents:[ItemModalComponent]
+    entryComponents:[ItemModalComponent,CheckListModalComponent]
 })
 export class AppModule {
 }
