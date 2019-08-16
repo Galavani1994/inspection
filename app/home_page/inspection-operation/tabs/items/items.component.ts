@@ -4,7 +4,7 @@ import data from "~/product_file/666.json";
 
 import {DropDown} from "nativescript-drop-down";
 import {ItemsService} from "~/services/items/items.service";
-
+import * as Toast from 'nativescript-toast';
 
 var Sqlite = require("nativescript-sqlite");
 
@@ -93,7 +93,7 @@ export class ItemsComponent implements OnInit {
 
     public deleteTable() {
         this.itemService.excute("DROP TABLE itemTbl").then(de => {
-            alert("جدول مورد نظر حذف شد");
+            Toast.makeText("جدول مورد نظر حذف شد").show();
         }, error => {
             console.log('errore is...', error);
         });
@@ -102,14 +102,14 @@ export class ItemsComponent implements OnInit {
     public insert() {
         if(this.update==false && this.newId==null){
            this.itemService.excute2("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
-                alert('ثبت شد');
+                Toast.makeText('ثبت شد').show();
                 console.log("INSERT RESULT", id);
             }, error => {
                 console.log("INSERT ERROR", error);
             });
         }else {
             this.itemService.excute2("update itemTbl set productCharacter= ? WHERE id=?",[JSON.stringify(this.itemCharacter),this.newId]).then(id => {
-                alert('ویرایش  شد');
+                Toast.makeText('ویرایش  شد').show();
                 console.log("updateed RESULT", id);
             }, error => {
                 console.log("update ERROR", error);
@@ -142,7 +142,7 @@ export class ItemsComponent implements OnInit {
 
     delete(id) {
         this.itemService.excute("DELETE FROM  itemTbl WHERE id=" + id).then(de => {
-            alert("deleted succesfully....");
+            Toast.makeText("deleted succesfully....").show();
         }, error => {
             console.log('errore is...', error);
         });

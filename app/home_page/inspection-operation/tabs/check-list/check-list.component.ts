@@ -12,7 +12,7 @@ import {ModalDialogOptions, ModalDialogService} from "nativescript-angular";
 import {DialogOptions} from "tns-core-modules/ui/dialogs";
 import {ItemModalComponent} from "~/home_page/modals/item-modal/item-modal.component";
 import {CheckListModalComponent} from "~/home_page/modals/check-list-modal/check-list-modal.component";
-
+import * as Toast from 'nativescript-toast';
 
 @Component({
     selector: 'app-check-list',
@@ -98,7 +98,7 @@ export class CheckListComponent implements OnInit {
 
     public checkListSave(el) {
         this.checkListService.excute2("insert into checkListTbl(checkList) VALUES (?) ", [JSON.stringify(this.checkListItemVaue)]).then(id => {
-            alert('ثبت شد');
+            Toast.makeText('ثبت شد').show();
             this.fetchChecklist();
         }, error => {
             console.log("INSERT ERROR", error);
@@ -107,7 +107,7 @@ export class CheckListComponent implements OnInit {
 
     public deleteTable() {
         this.checkListService.excute("DROP TABLE checkListTbl").then(de => {
-            alert("جدول مورد نظر حذف شد");
+            Toast.makeText("جدول مورد نظر حذف شد").show();
         }, error => {
             console.log('errore is...', error);
         });
@@ -156,7 +156,7 @@ export class CheckListComponent implements OnInit {
     }
     public deleteCheklist(id){
         this.checkListService.excute("delete from checkListTbl where id="+id).then(de => {
-            alert("deleted succesfully....");
+            Toast.makeText("deleted succesfully....").show();
         }, error => {
             console.log('errore is...', error);
         });
