@@ -29,6 +29,7 @@ export class CheckListComponent implements OnInit {
 
     checkLists = [];
     checkListTitle = [];
+    checkListIds = [];
     indexCheckList: number;
 
     itemId: number;
@@ -61,6 +62,7 @@ export class CheckListComponent implements OnInit {
         this.checkLists = data.inspectionCheckLists;
         for (let ch of this.checkLists) {
             this.checkListTitle.push(ch.checkListTitle);
+            this.checkListIds.push(ch.checkListId);
         }
 
     }
@@ -186,7 +188,9 @@ export class CheckListComponent implements OnInit {
     public selectedIndexChangedCheckList(args) {
         let picker = <DropDown>args.object;
         let checkListName = picker.items[picker.selectedIndex];
+        let checkListId = this.checkListIds[picker.selectedIndex];
         this.checkListItemVaue.checkListTitle = checkListName;
+        this.checkListItemVaue.checkListId = checkListId;
 
     }
     public displayIdentifyChars(id){
@@ -209,7 +213,7 @@ export class CheckListComponent implements OnInit {
             fullscreen:true
         };
         this.modalService.showModal(CheckListModalComponent, options);
-       // console.log(res);
+
     }
 
 

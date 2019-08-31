@@ -47,9 +47,9 @@ export class ItemsComponent implements OnInit {
     }
 
     genCols(item) {
-        let columns = "*,*";
+        let columns = "auto ,auto ";
         item.forEach((el) => {
-            columns += ",*";
+            columns += ",auto ";
         })
         return columns
     }

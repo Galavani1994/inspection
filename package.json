@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "base-64": "^0.1.0",
     "nativescript-angular": "~7.2.0",
     "nativescript-camera": "^4.5.0",
     "nativescript-checkbox": "^3.0.3",
@@ -33,9 +34,11 @@
     "reflect-metadata": "~0.1.12",
     "rxjs": "~6.3.3",
     "tns-core-modules": "~5.2.0",
+    "utf8": "^3.0.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^0.803.2",
     "@angular-devkit/core": "~7.2.0",
     "@angular/cli": "^7.2.0",
     "@angular/compiler-cli": "~7.2.0",

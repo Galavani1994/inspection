@@ -21,6 +21,7 @@ import {TNSCheckBoxModule} from "nativescript-checkbox/angular";
 import { ItemModalComponent } from './home_page/modals/item-modal/item-modal.component';
 import { CheckListModalComponent } from './home_page/modals/check-list-modal/check-list-modal.component';
 import { CheckListAnswerComponent } from './home_page/modals/check-list-modal/check-list-answer/check-list-answer.component';
+import { CheckListAnswerPhotoComponent } from './home_page/modals/check-list-modal/check-list-answer-photo/check-list-answer-photo.component';
 
 
 
@@ -43,6 +44,7 @@ import { CheckListAnswerComponent } from './home_page/modals/check-list-modal/ch
         ItemModalComponent,
         CheckListModalComponent,
         CheckListAnswerComponent,
+        CheckListAnswerPhotoComponent,
     ],
     imports: [
         NativeScriptModule,
@@ -60,7 +62,12 @@ import { CheckListAnswerComponent } from './home_page/modals/check-list-modal/ch
     ],
     bootstrap: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA],
-    entryComponents:[ItemModalComponent,CheckListModalComponent,CheckListAnswerComponent]
+    entryComponents:[
+        ItemModalComponent,
+        CheckListModalComponent,
+        CheckListAnswerComponent,
+        CheckListAnswerPhotoComponent
+    ]
 })
 export class AppModule {
 }
