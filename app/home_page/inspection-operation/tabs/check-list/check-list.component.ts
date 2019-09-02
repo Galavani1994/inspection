@@ -24,6 +24,7 @@ export class CheckListComponent implements OnInit {
 
     @ViewChild("CB1") FirstCheckBox: ElementRef;
     productTitles = [];
+    productIds = [];
     inspectionItem = [];
     indexItem: number;
 
@@ -35,7 +36,7 @@ export class CheckListComponent implements OnInit {
     itemId: number;
 
 
-    checkListItemVaue = {itemTitle: '', identifyCharId: null, checkListTitle: '', checkListId: null, points: null};
+    checkListItemVaue = {itemId:null,itemTitle: '', identifyCharId: null, checkListTitle: '', checkListId: null, points: null};
 
     show = false;
     showCheckLsit=false;
@@ -58,6 +59,7 @@ export class CheckListComponent implements OnInit {
         this.inspectionItem = data.inspectionOperationItems;
         for (let item of this.inspectionItem) {
             this.productTitles.push(item.productTitle);
+            this.productIds.push(item.productId);
         }
         this.checkLists = data.inspectionCheckLists;
         for (let ch of this.checkLists) {
@@ -167,7 +169,9 @@ export class CheckListComponent implements OnInit {
     public selectedIndexChanged(args) {
         let picker = <DropDown>args.object;
         let itemName = picker.items[picker.selectedIndex];
+        let itemId=this.productIds[picker.selectedIndex];
         this.checkListItemVaue.itemTitle = itemName;
+        this.checkListItemVaue.itemId=itemId;
         if (itemName != 0) {
             this.itemCharacter = [];
             let titleIndex = this.inspectionItem.findIndex(obj => obj.productTitle == itemName);

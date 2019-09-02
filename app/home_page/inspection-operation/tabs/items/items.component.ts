@@ -19,8 +19,8 @@ export class ItemsComponent implements OnInit {
     public resultItemChsrschter: Array<any>;
 
     id: number = 0;
-    newId:number;
-    update=false;
+    newId: number;
+    update = false;
     inspectionItem = [];
     productTitles = [];
     identifyCharacters = [];
@@ -35,9 +35,10 @@ export class ItemsComponent implements OnInit {
     public mainId: number;
     columns: string = "auto,auto,auto,auto";
 
-    public constructor(public itemService:ItemsService) {
+    public constructor(public itemService: ItemsService) {
         this.itemService;
     }
+
     ngOnInit() {
 
         this.inspectionItem = data.inspectionOperationItems;
@@ -70,7 +71,6 @@ export class ItemsComponent implements OnInit {
     }
 
 
-
     public selectedIndexChanged(args) {
         let picker = <DropDown>args.object;
         let itemName = picker.items[picker.selectedIndex];
@@ -100,15 +100,15 @@ export class ItemsComponent implements OnInit {
     }
 
     public insert() {
-        if(this.update==false && this.newId==null){
-           this.itemService.excute2("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
+        if (this.update == false && this.newId == null) {
+            this.itemService.excute2("INSERT INTO itemTbl (productCharacter,productName,productId) VALUES (?,?,?)", [JSON.stringify(this.itemCharacter), this.proTitle, this.proId]).then(id => {
                 Toast.makeText('ثبت شد').show();
                 console.log("INSERT RESULT", id);
             }, error => {
                 console.log("INSERT ERROR", error);
             });
-        }else {
-            this.itemService.excute2("update itemTbl set productCharacter= ? WHERE id=?",[JSON.stringify(this.itemCharacter),this.newId]).then(id => {
+        } else {
+            this.itemService.excute2("update itemTbl set productCharacter= ? WHERE id=?", [JSON.stringify(this.itemCharacter), this.newId]).then(id => {
                 Toast.makeText('ویرایش  شد').show();
                 console.log("updateed RESULT", id);
             }, error => {
@@ -117,24 +117,24 @@ export class ItemsComponent implements OnInit {
         }
         this.fetch();
         this.clearData();
-        this.update=false;
-        this.newId=null;
+        this.update = false;
+        this.newId = null;
     }
 
     public fetch() {
         this.itemService.All("SELECT * FROM itemTbl e where e.productId=" + this.proId).then(rows => {
-        this.resultItemChsrschter = [];
-        for (var row in rows) {
-            this.resultItemChsrschter.push({
-                    id: rows[row][0],
-                    values: JSON.parse(rows[row][1])
-                }
-            );
+            this.resultItemChsrschter = [];
+            for (var row in rows) {
+                this.resultItemChsrschter.push({
+                        id: rows[row][0],
+                        values: JSON.parse(rows[row][1])
+                    }
+                );
 
-        }
-    }, error => {
-        console.log("SELECT ERROR", error);
-    });
+            }
+        }, error => {
+            console.log("SELECT ERROR", error);
+        });
 
         this.show = true;
 
@@ -150,8 +150,8 @@ export class ItemsComponent implements OnInit {
     }
 
     edit(id) {
-        this.newId=id;
-        this.update=true;
+        this.newId = id;
+        this.update = true;
         this.itemService.All("select * FROM  itemTbl WHERE id=" + id).then(de => {
 
             this.itemCharacter = JSON.parse(de[0][1]);
