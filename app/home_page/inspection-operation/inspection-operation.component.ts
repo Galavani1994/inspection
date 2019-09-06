@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+
+
 @Component({
   selector: 'app-inspection-operation',
   templateUrl: './inspection-operation.component.html',
@@ -13,4 +15,7 @@ export class InspectionOperationComponent implements OnInit {
   ngOnInit() {
   }
 
+    get_data() {
+
+    }
 }

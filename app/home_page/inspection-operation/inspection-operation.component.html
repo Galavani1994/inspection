@@ -7,7 +7,7 @@
 </Page>
 <GridLayout columns="*, *" rows="*, *"  backgroundColor="lightgray">
     <Label text="ارسال اطلاعات" row="0" col="0"></Label>
-    <Label text="دریافت اطلاعات" row="0" col="1"></Label>
+    <Label (tap)="get_data()" text="دریافت اطلاعات" row="0" col="1"></Label>
     <Label text="تنظیمات" row="1" col="0"></Label>
     <Label [nsRouterLink]="['/tabs']" text="عملیات بازرسی" row="1" col="1"></Label>
 </GridLayout>

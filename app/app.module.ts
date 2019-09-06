@@ -22,6 +22,7 @@ import { ItemModalComponent } from './home_page/modals/item-modal/item-modal.com
 import { CheckListModalComponent } from './home_page/modals/check-list-modal/check-list-modal.component';
 import { CheckListAnswerComponent } from './home_page/modals/check-list-modal/check-list-answer/check-list-answer.component';
 import { CheckListAnswerPhotoComponent } from './home_page/modals/check-list-modal/check-list-answer-photo/check-list-answer-photo.component';
+import { GetDataComponent } from './home_page/recive_data/get-data/get-data.component';
 
 
 
@@ -45,6 +46,7 @@ import { CheckListAnswerPhotoComponent } from './home_page/modals/check-list-mod
         CheckListModalComponent,
         CheckListAnswerComponent,
         CheckListAnswerPhotoComponent,
+        GetDataComponent,
     ],
     imports: [
         NativeScriptModule,
